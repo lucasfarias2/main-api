@@ -13,6 +13,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/joho/godotenv"
 	"html/template"
+	"main-api/routes"
 )
 
 func main() {
@@ -28,13 +29,35 @@ func main() {
 
 	r.HandleFunc("/ws", handleConnections)
 
+	r.Mount("/api", routes.ApiRouter())
+	r.Mount("/", routes.WebRouter())
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl, err := template.ParseFiles("templates/index.html")
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		tmpl.Execute(w, nil)
+
+		data := map[string]interface{}{
+			"Pattern": r.URL.Path,
+		}
+
+		tmpl.Execute(w, data)
+	})
+
+	r.Get("/projects", func(w http.ResponseWriter, r *http.Request) {
+		tmpl, err := template.ParseFiles("templates/projects.html")
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		data := map[string]interface{}{
+			"Pattern": r.URL.Path,
+		}
+
+		tmpl.Execute(w, data)
 	})
 
 	log.Println("Running on localhost:8080")
