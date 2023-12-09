@@ -1,21 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Packlify - Projects</title>
-    <link rel="stylesheet" href="static/index.css"/>
-    <script src="https://unpkg.com/htmx.org"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        var url = "{{ .Pattern }}";
-    </script>
-    <script src="static/hmr.js"></script>
-</head>
-<body id="content">
-<main>
-    <nav className="">
-        {{ .Pattern }}
-    </nav>
-    <h1 class="text-4xl text-red-400">Projects</h1>
-</main>
-</body>
-</html>
+{{ define "head" }} {{ end }}
+{{ define "content" }}
+<h1 class="text-4xl text-red-400">Projects</h1>
+<!-- More content specific to the projects page -->
+{{ end }}

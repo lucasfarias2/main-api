@@ -30,34 +30,20 @@ func main() {
 	r.HandleFunc("/ws", handleConnections)
 
 	r.Mount("/api", routes.ApiRouter())
-	r.Mount("/", routes.WebRouter())
+	//r.Mount("/", routes.WebRouter())
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl, err := template.ParseFiles("templates/index.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		data := map[string]interface{}{
+		renderTemplate(w, r, "index", map[string]interface{}{
+			"Title":   "Packlify",
 			"Pattern": r.URL.Path,
-		}
-
-		tmpl.Execute(w, data)
+		})
 	})
 
 	r.Get("/projects", func(w http.ResponseWriter, r *http.Request) {
-		tmpl, err := template.ParseFiles("templates/projects.html")
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		data := map[string]interface{}{
+		renderTemplate(w, r, "projects", map[string]interface{}{
+			"Title":   "Packlify - Projects",
 			"Pattern": r.URL.Path,
-		}
-
-		tmpl.Execute(w, data)
+		})
 	})
 
 	log.Println("Running on localhost:8080")
@@ -80,6 +66,19 @@ func fileServer(r chi.Router, path string, root http.FileSystem) {
 	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
 		fs.ServeHTTP(w, r)
 	})
+}
+
+func renderTemplate(w http.ResponseWriter, r *http.Request, name string, data map[string]interface{}) {
+	tmpl, err := template.ParseFiles("templates/layout.html", "templates/"+name+".html")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = tmpl.ExecuteTemplate(w, "layout.html", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
 
 var upgrader = websocket.Upgrader{

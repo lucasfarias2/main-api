@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ .Title }}</title>
+    <link rel="stylesheet" href="static/index.css"/>
+    <link rel="icon" href="static/favicon.ico" type="image/x-icon">
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        const socket = new WebSocket('ws://localhost:8080/ws');
+
+        socket.onmessage = function (event) {
+            const message = event.data;
+            fetch("{{.Pattern}}").then(response => response.text()).then(data => {
+                updateContent("a", data);
+            });
+        };
+
+        function updateContent(templateID, newContent) {
+            // Update the specific part of your DOM with the new content
+            // The logic here depends on how your templates map to your DOM
+            // Example:
+            document.getElementById("content").innerHTML = newContent;
+        }
+    </script>
+    {{ template "head" . }}
+</head>
+<body id="content">
+<main>
+    <nav class="flex h-16 bg-white shadow items-center px-24 justify-between">
+        <div class="flex items-center">
+            <a href="/">
+                <img src="static/logo.png" alt="logo" class="h-8 mr-4"/>
+            </a>
+            <div>
+                <a href="/" class="ml-4 text-gray-700 hover:text-gray-900">Home</a>
+                <a href="/projects" class="ml-4 text-gray-700 hover:text-gray-900">Projects</a>
+            </div>
+        </div>
+        <div>
+            <a href="/login" class="ml-4 text-gray-700 hover:text-gray-900">Login</a>
+            <a href="/register" class="ml-4 text-gray-700 hover:text-gray-900">Register</a>
+        </div>
+    </nav>
+    {{ template "content" . }}
+</main>
+</body>
+</html>

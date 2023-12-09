@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Packlify</title>
-    <link rel="stylesheet" href="static/index.css"/>
-    <script src="https://unpkg.com/htmx.org"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        var url = "{{ .Pattern }}";
-    </script>
-    <script src="static/hmr.js"></script>
-</head>
-<body id="content">
-<main>
-    <nav className="">
-        {{ .Pattern }}
-    </nav>
-    <h1 class="text-4xl text-red-400">Packlify</h1>
-</main>
-</body>
-</html>
+{{ define "head" }} {{ end }}
+{{ define "content" }}
+<div class="text-4xl text-red-400">
+
+    test
+</div>
+<!-- More content specific to the index page -->
+{{ end }}
