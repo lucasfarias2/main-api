@@ -70,7 +70,7 @@ func ApiRouter() *chi.Mux {
 			return
 		}
 
-		expiresIn := time.Hour * 24 * 14
+		expiresIn := time.Hour * 24 * 30 * 12 // 1 year
 
 		token, err := client.SessionCookie(r.Context(), requestBody.Token, expiresIn)
 		if err != nil {
